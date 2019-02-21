@@ -63,7 +63,7 @@ class Home extends React.Component {
 
   fetchHyperledgerData() {
     return fetch(
-      `http://192.168.0.9:8080/api/query/queryAllPlanners`
+      `http://${this.props.hyperServer}:8080/api/query/queryAllPlanners`
     )
       .then(response => response.json())
       .catch(error => {
@@ -73,7 +73,7 @@ class Home extends React.Component {
 
   fetchHyperledgerInsuranceData() {
     return fetch(
-      `http://192.168.0.9:8080/api/query/queryAllContractedInsurance`
+      `http://${this.props.hyperServer}:8080/api/query/queryAllContractedInsurance`
     )
       .then(response => response.json())
       .catch(error => {
@@ -83,7 +83,7 @@ class Home extends React.Component {
 
   fetchHyperledgerRequestForISM() {
     return fetch(
-      `http://192.168.0.9:8080/api/query/queryAllClaimInsurance`
+      `http://${this.props.hyperServer}:8080/api/query/queryAllClaimInsurance`
     )
       .then(response => response.json())
       .catch(error => {
@@ -404,6 +404,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
+    hyperServer : state.hyperServer,
     InsuranceInfo: state.UserInsuranceInfo,
     PlannerInfo: state.PlannerInfo,
     News: state.News,

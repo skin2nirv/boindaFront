@@ -64,17 +64,17 @@ class ClaimForInsurance extends React.Component {
                 return alert("연필모양을 눌러 영수증을 등록해주세요");
               } else {
 
-                fetch('http://192.168.0.9:8080/api/invoke/claim', {
+                fetch(`http://${this.props.hyperServer}:8080/api/invoke/claim`, {
                   method: 'POST',
                   body: JSON.stringify({
-                    "Key" : "Stock20",
+                      "Key" : "Claim20",
                       "accidentName" : "교통사고",
-                      "accidentDay": "18.06.29",
-                      "requestDay": "180629",
-                      "accidentNum": "045sD456",
-                      "insuranceName": " 김정수",
+                      "accidentDay": "a",
+                      "requestDay": "b",
+                      "accidentNum": "c",
+                      "insuranceName": "김정수",
                       "insuranceCo": "삼성",
-                      "stateReceive": false,
+                      "stateReceive": "d",
                       "userId": 'user1', 
                       "image": '삼성' 
 
@@ -84,7 +84,7 @@ class ClaimForInsurance extends React.Component {
                   }
                 })
                 .then( alert("증권 등록에 성공하였습니다."))
-                .then(this.props.navigation.navigate('InsuranceStockOption'))
+                .then(this.props.navigation.navigate('Home'))
 
 
               }
@@ -169,6 +169,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
+    hyperServer : state.hyperServer,
     UserInfo: state.UserInfo,
     ChoiceInsurance: state.ChoiceInsurance
   };

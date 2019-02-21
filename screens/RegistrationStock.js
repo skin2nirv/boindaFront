@@ -18,8 +18,7 @@ import EvilIcons from "react-native-vector-icons/EvilIcons";
 import { connect } from "react-redux";
 import _ from "lodash";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import md5 from "react-native-md5"
-
+import md5 from "react-native-md5";
 
 
 
@@ -29,10 +28,10 @@ import md5 from "react-native-md5"
 class RegistrationStock extends React.Component {
   constructor() {
     super();
-
     this.state = {
-  
-
+      hash: null,
+      buffer: null,
+      ipfsHash: null,
       image:
       "http://mblogthumb3.phinf.naver.net/MjAxODA2MTVfMjkg/MDAxNTI5MDM2Mzc2NTMx.Ivt22TO6PAHisNnQ0hZr1TGhAKpX0jS3P8DOgd7eUzcg.bOEGQziKBWU89ao2RBaB-eAXGy79kcEu4OC9vMj3lJMg.PNG.stan322/image.png?type=w800"
   
@@ -41,16 +40,6 @@ class RegistrationStock extends React.Component {
   
   }
 
-  // fetchHyperledgerRequestForISM() {
-  //   return fetch(
-  //     `http://192.168.0.9:8080/api/query/queryAllClaimInsurance`
-  //   )
-  //     .then(response => response.json())
-  //     .catch(error => {
-  //       console.error(error);
-  //     });
-  // }
-
   static navigationOptions = ({ navigation }) => {
     return {
       title: "KALON",
@@ -58,10 +47,7 @@ class RegistrationStock extends React.Component {
       headerTitleStyle: { fontSize: 22, color: "white" }
     };
   };
-  // myImageHashFunction = async (imageUri) => {
-  //   let fsInfo = await FileSystem.getInfoAsync(imageUri, [{ md5: true }] )
-  //   console.log("hash:"+ fsInfo.md5)
-  // }
+
 
   //   async componentDidMount() {
   //     const name = this.props.navigation.getParam("name");
@@ -80,8 +66,6 @@ class RegistrationStock extends React.Component {
 
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    fetchHyperledgerRequestForISM().then( items => this.setState({ claimLength : items.length}))
-    
   }
   render() {
     let image = this.state.image;
@@ -132,15 +116,14 @@ class RegistrationStock extends React.Component {
                 "http://mblogthumb3.phinf.naver.net/MjAxODA2MTVfMjkg/MDAxNTI5MDM2Mzc2NTMx.Ivt22TO6PAHisNnQ0hZr1TGhAKpX0jS3P8DOgd7eUzcg.bOEGQziKBWU89ao2RBaB-eAXGy79kcEu4OC9vMj3lJMg.PNG.stan322/image.png?type=w800"
               ) {
                 return alert("연필모양을 눌러 증권을 등록해주세요");
-              } else {
-                
-                fetch('http://192.168.0.9:8080/api/invoke/stock', {
+              } else {                
+                fetch(`http://${this.props.hyperServer}:8080/api/invoke/stock`, {
                   method: 'POST',
                   body: JSON.stringify({
                     "Key" : "Stock20",
                     "userId" : "user1",
-                    "name" : UserInsuranceID,
-                    "image" : false, //this.state.image, //this.state.hash,
+                    "name" : String(UserInsuranceID),
+                    "image" : this.state.hash,
                     "InsuranceCompany" : insuranceCo
                   }),
                   headers:{
@@ -172,27 +155,22 @@ class RegistrationStock extends React.Component {
     if (!result.cancelled) {
 
 
-      this.setState({
+      await this.setState({
         image: result.uri,
-        // buffer: Buffer(result.uri)
-        base64 : result.base64,
 
-      });
-
-
+        base64 : result.uri
+      })
       let b64_md5v = md5.b64_md5(this.state.base64);
 
       this.setState({
         hash : b64_md5v
       })
       console.log(">>>>b64_md5:", b64_md5v);
-
-      // await myImageHashFunction(this.state.image)
-
+  
 
 
-
-     //console.log("image uri : " + this.state.image)
+      
+      console.log("image uri : " + this.state.image)
     }
   };
 }
@@ -271,6 +249,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
+    hyperServer : state.hyperServer,
     UserInfo: state.UserInfo,
     RequestForISM: _.sortBy(state.RequestForISM, p => p.requestDay * -1).slice(
       0,
