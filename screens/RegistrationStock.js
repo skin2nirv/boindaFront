@@ -30,8 +30,8 @@ class RegistrationStock extends React.Component {
     super();
     this.state = {
       hash: null,
-      buffer: null,
-      ipfsHash: null,
+      // buffer: null,
+      // ipfsHash: null,
       image:
       "http://mblogthumb3.phinf.naver.net/MjAxODA2MTVfMjkg/MDAxNTI5MDM2Mzc2NTMx.Ivt22TO6PAHisNnQ0hZr1TGhAKpX0jS3P8DOgd7eUzcg.bOEGQziKBWU89ao2RBaB-eAXGy79kcEu4OC9vMj3lJMg.PNG.stan322/image.png?type=w800"
   
@@ -148,29 +148,18 @@ class RegistrationStock extends React.Component {
       allowsEditing: true,
       aspect: [4, 3]
     });
-
-
     // console.log(result);
-
     if (!result.cancelled) {
-
-
       await this.setState({
         image: result.uri,
-
-        base64 : result.uri
+        base64 : result.base64
       })
       let b64_md5v = md5.b64_md5(this.state.base64);
-
       this.setState({
         hash : b64_md5v
       })
-      console.log(">>>>b64_md5:", b64_md5v);
-  
-
-
-      
-      console.log("image uri : " + this.state.image)
+      // console.log(">>>>b64_md5:", b64_md5v);
+      // console.log("image uri : " + this.state.hash)
     }
   };
 }

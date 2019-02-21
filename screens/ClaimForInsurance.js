@@ -5,8 +5,14 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { connect } from "react-redux";
 import { ImagePicker, Permissions } from "expo";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
+import md5 from "react-native-md5";
 
 class ClaimForInsurance extends React.Component {
+  state ={
+    claimNumber : null,
+    hash : null
+
+  }
   static navigationOptions = ({ navigation }) => {
     return {
       title: "KALON",
@@ -18,9 +24,42 @@ class ClaimForInsurance extends React.Component {
     image:
       "http://mblogthumb3.phinf.naver.net/MjAxODA2MTVfMjkg/MDAxNTI5MDM2Mzc2NTMx.Ivt22TO6PAHisNnQ0hZr1TGhAKpX0jS3P8DOgd7eUzcg.bOEGQziKBWU89ao2RBaB-eAXGy79kcEu4OC9vMj3lJMg.PNG.stan322/image.png?type=w800"
   };
+
+  fetchHyperledgerRequestForISM() {
+    return fetch(
+      `http://${this.props.hyperServer}:8080/api/query/queryAllClaimInsurance`
+    )
+      .then(response => response.json())
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-  }
+    
+    await this.fetchHyperledgerRequestForISM().then(items => {
+      this.setState({
+        claimNumber : (JSON.parse(items.response)).length,
+      })
+      // console.log(this.state.claimNumber)
+    })
+
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    if(dd<10) {
+      dd='0'+dd
+    } 
+    if(mm<10) {
+        mm='0'+mm
+    } 
+    today = mm+'/'+dd+'/'+yyyy;
+    this.setState({
+      today 
+    }) 
+}
   render() {
     var item = this.props.ChoiceInsurance;
     return (
@@ -37,7 +76,7 @@ class ClaimForInsurance extends React.Component {
             this.props.navigation.navigate("InsuranceChoiceScreen");
           }}
         >
-          <Text> {item || "보험선택 click"} </Text>
+          <Text> {item.name || "보험선택 click"} </Text>
         </TouchableOpacity>
 
         <View style={styles.textBox}>
@@ -67,16 +106,16 @@ class ClaimForInsurance extends React.Component {
                 fetch(`http://${this.props.hyperServer}:8080/api/invoke/claim`, {
                   method: 'POST',
                   body: JSON.stringify({
-                      "Key" : "Claim20",
-                      "accidentName" : "교통사고",
-                      "accidentDay": "a",
-                      "requestDay": "b",
-                      "accidentNum": "c",
+                      "Key" : String("Claim"+ (this.state.claimNumber + 1)),
+                      "accidentName" : "입력하기",
+                      "accidentDay": "입력하기",
+                      "requestDay": String(this.state.today),
+                      "accidentNum": String("a0df0f0"+(this.state.claimNumber + 1)),
                       "insuranceName": "김정수",
-                      "insuranceCo": "삼성",
-                      "stateReceive": "d",
+                      "insuranceCo": String(item.insuranceCo),
+                      "stateReceive": "false",
                       "userId": 'user1', 
-                      "image": '삼성' 
+                      "image": String(this.state.hash) 
 
                   }),
                   headers:{
@@ -102,20 +141,19 @@ class ClaimForInsurance extends React.Component {
       allowsEditing: true,
       aspect: [4, 3]
     });
-    console.log(result);
+    // console.log(result);
     if (!result.cancelled) {
-      this.setState({
+     await this.setState({
         image: result.uri,
         base64 : result.base64
       });
-
       let b64_md5v = md5.b64_md5(this.state.base64);
-
       this.setState({
         hash : b64_md5v
       })
-      console.log(">>>>b64_md5:", b64_md5v);
-      console.log("hash :" + this.state.hash)
+      // console.log(">>>>b64_md5:", b64_md5v);
+      // console.log("hash :" + this.state.hash)
+      console.log("item: " + item)
 
     }
   };

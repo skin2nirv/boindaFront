@@ -143,7 +143,7 @@ class Home extends React.Component {
       News: this.props.News
     });
 
-    console.log(this.props.PlannerInfo)
+    // console.log(this.props.PlannerInfo)
   }
 
   render() {

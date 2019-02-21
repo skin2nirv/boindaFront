@@ -43,7 +43,7 @@ class InsuranceChoiceScreen extends React.Component {
               onPress={() => {
                 this.props.dispatch({
                   type: "ADD_CHOICEINSURANCE",
-                  ChoiceInsurance: item.name
+                  ChoiceInsurance: item
                 }),
                   this.props.navigation.navigate("ClaimForInsurance");
               }}
