@@ -104,7 +104,7 @@ const reducer = (
       email: "jungsubabo@naver.com",
       phonenumber: "010-4383-8890",
       image:
-        "https://freecartok.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png"
+        "https://scontent-lht6-1.cdninstagram.com/vp/00a46baced30a956b68580df4515a584/5CEECADF/t51.2885-15/e35/25025824_184633442119937_7061717784211750912_n.jpg?_nc_ht=scontent-lht6-1.cdninstagram.com&se=8&ig_cache_key=MTY3NDQ0NTc0NjU3MjQ0MzEwOQ%3D%3D.2"
     },
     PlannerInfo: [
 

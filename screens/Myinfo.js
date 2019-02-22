@@ -20,9 +20,9 @@ import JoininsuranceFlatLists from "../components/JoininsuranceFlatLists";
 class Myinfo extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: "KALON",
-      headerStyle: { backgroundColor: "#F5DA81" },
-      headerTitleStyle: { fontSize: 22, color: "white" }
+      title: "내정보",
+      headerStyle: { backgroundColor: "#ffdb00" },
+      headerTitleStyle: { fontSize: 15, color: "white", fontWeight: "600", fontStyle: "normal", letterSpacing: 0, color: "#535353" }
     };
   };
   state = {

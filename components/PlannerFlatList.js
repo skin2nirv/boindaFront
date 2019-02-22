@@ -16,26 +16,27 @@ class PlannerFlatList extends React.Component {
         <View style={styles.contentsBox}>
           <Image style={styles.imageStyle} source={{ uri: this.props.uri }} />
           <View style={styles.textViewBox}>
-            <Text style={{ color: "#585858", fontSize: 20 }}>
+            <Text style={{ color: "#a7a7a7", fontSize: 17 }}>
               {this.props.team}
             </Text>
-            <Text>{this.props.name} 설계사</Text>
-            <Text>담당 고객 : {this.props.clientNum}명</Text>
-            <Text>똑똑포인트 : {this.props.smartRecommedPoint}</Text>
+            <Text style={{ marginTop: 8, fontSize: 15, color: "#696969" }}>
+            "{this.props.comment}"
+            </Text>
+            
+            <Text style={{ marginTop: 5, fontSize: 12, color: "#696969" }} >담당 고객 : {this.props.clientNum}명</Text>
+            <Text style={{ marginTop: 5, fontSize: 12, color: "#696969" }}>똑똑 포인트 : {this.props.smartRecommedPoint}</Text>
+            
             <Text style={styles.starBox}>
               <Ionicons
                 name="ios-star"
-                style={{ fontSize: 20, color: "#FFBF00" }}
+                style={{ fontSize: 20, color: "#ffdb00", }}
               />
-              X{this.props.averageEstimation}
+              {this.props.averageEstimation}
             </Text>
+            <Text style={{ color:"#444444", fontSize: 18, position:"absolute", right: 0, bottom: 40}}>{this.props.name} 설계사</Text>
           </View>
         </View>
-        <View style={styles.motoTextBox}>
-          <Text style={{ fontSize: 20, color: "#585858" }}>
-            "{this.props.comment}"
-          </Text>
-        </View>
+ 
       </TouchableOpacity>
     );
   }
@@ -43,23 +44,23 @@ class PlannerFlatList extends React.Component {
 
 const styles = StyleSheet.create({
   boxContainer: {
-    width: 350,
-    height: 200,
-    margin: 20
+    width: 370,
+    height: 150,
+    // margin: 20
   },
   contentsBox: {
-    width: 350,
-    height: 150,
-    borderTopRightRadius: 10,
-    borderTopLeftRadius: 10,
-    backgroundColor: "#F2F2F2"
+    width: 370,
+    height: 160,
+    // borderTopRightRadius: 10,
+    // borderTopLeftRadius: 10,
+    backgroundColor: "white"
   },
   imageStyle: {
     position: "absolute",
-    left: 20,
-    top: 15,
+    left: 12,
+    top: 12,
     height: 120,
-    width: 100,
+    width: 120,
     borderRadius: 5
   },
   textViewBox: {
@@ -67,18 +68,19 @@ const styles = StyleSheet.create({
     width: 200,
     height: 150,
     right: 0,
-    justifyContent: "center",
+    left : 150,
+    top : 12,
+    justifyContent: "flex-start",
     alignItems: "flex-start"
   },
-  startBox: {
+  starBox: {
     fontSize: 15,
     color: "#6E6E6E",
-    position: "absolute",
-    top: 20,
-    right: 20,
+    marginTop: 5,
+    // position: "absolute",
+    // top: 20,
+    // right: 20,
     backgroundColor: "white",
-    paddingRight: 5,
-    paddingLeft: 5
   },
   motoTextBox: {
     width: 350,

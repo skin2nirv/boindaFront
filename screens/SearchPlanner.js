@@ -20,9 +20,12 @@ class SearchPlanner extends React.Component {
   state = {};
   static navigationOptions = ({ navigation }) => {
     return {
-      headerStyle: { backgroundColor: "#F5DA81", justifyContent: "flex-start" }
+      title: "검색결과",
+      headerStyle: { backgroundColor: "#ffdb00" },
+      headerTitleStyle: { fontSize: 15, color: "white", fontWeight: "600", fontStyle: "normal", letterSpacing: 0, color: "#535353" }
     };
   };
+  
 
   componentDidMount() {
     this.setState({
@@ -34,7 +37,7 @@ class SearchPlanner extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.spaceView} />
+        {/* <View style={styles.spaceView} /> */}
 
         <ScrollView style={{ width: "100%" }}>
           <View style={styles.firstViewBox} />

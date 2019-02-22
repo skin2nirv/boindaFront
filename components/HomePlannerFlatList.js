@@ -20,7 +20,7 @@ class HomePlannerFlatList extends React.Component {
           source={{
             uri: this.props.uri
           }}
-          style={{ width: 120, height: 120, margin: 8 }}
+          style={{ width: 100, height: 100, margin: 8, borderRadius:3 }}
         />
         <Text style={{ color: "#6E6E6E", fontSize: 18, paddingLeft: 10 }}>
           {this.props.team}

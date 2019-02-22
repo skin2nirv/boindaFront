@@ -6,6 +6,7 @@ import {
 } from "react-navigation";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import Feather from "react-native-vector-icons/Feather";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 import reducer from "./reducers";
@@ -30,12 +31,20 @@ import SearchPlanner from "./screens/SearchPlanner";
 import InsurancePlannerDetail from "./screens/InsurancePlannerDetail";
 import InsuranceChoiceScreen from "./screens/InsuranceChoiceScreen";
 import ClaimForInsurance from "./screens/ClaimForInsurance";
+
 //import Test from "./screens/Test";
 
 let store = createStore(reducer);
 
+const Settings = createStackNavigator({
+  Settings: {
+      screen: Login
+  }
+})
+
 const homeStack = createStackNavigator({
-  Home: Home, // Home 으로 바꿀 것
+  
+  Home: {screen: Home}, // Home 으로 바꿀 것
   Login: Login,
   Detail: HomeDetail,
   ClaimForInsurance: ClaimForInsurance,
@@ -43,7 +52,9 @@ const homeStack = createStackNavigator({
   MyWeb: MyWeb,
   InsurancePlan: InsurancePlan,
   RecomandInsurance: RecomandInsurance
-});
+},
+
+);
 
 const MyInfoStack = createStackNavigator({
   Myinfo: Myinfo,
@@ -95,13 +106,25 @@ const TabNavigator = createBottomTabNavigator(
             />
           );
         } else if (routeName === "설계사") {
-          iconName = "ios-people";
+          return(
+          <Feather 
+           name="briefcase"
+           size={horizontal ? 20 : 25}
+           color={tintColor}
+           />
+          );
         } else if (routeName === "내정보") {
-          iconName = "ios-book";
+          return (
+            <Feather
+              name="user"
+              size={horizontal ? 20 : 25}
+              color={tintColor}
+            />
+          );
         } else if (routeName === "청구") {
           return (
             <MaterialCommunityIcons
-              name="plus-minus-box"
+              name="file-document-box-outline"
               size={horizontal ? 20 : 25}
               color={tintColor}
             />
@@ -125,6 +148,9 @@ const TabNavigator = createBottomTabNavigator(
 
 const RootStack = createStackNavigator(
   {
+    Setting:{
+      screen : Login 
+    },
     Main: {
       screen: TabNavigator
     },

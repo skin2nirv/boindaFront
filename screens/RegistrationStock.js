@@ -33,7 +33,7 @@ class RegistrationStock extends React.Component {
       // buffer: null,
       // ipfsHash: null,
       image:
-      "http://mblogthumb3.phinf.naver.net/MjAxODA2MTVfMjkg/MDAxNTI5MDM2Mzc2NTMx.Ivt22TO6PAHisNnQ0hZr1TGhAKpX0jS3P8DOgd7eUzcg.bOEGQziKBWU89ao2RBaB-eAXGy79kcEu4OC9vMj3lJMg.PNG.stan322/image.png?type=w800"
+      "https://www.posbill.com/kassensystem-blog/wp-content/themes/miyazaki/assets/images/default-fallback-image.png"
   
 
     };
@@ -42,11 +42,16 @@ class RegistrationStock extends React.Component {
 
   static navigationOptions = ({ navigation }) => {
     return {
-      title: "KALON",
-      headerStyle: { backgroundColor: "#F5DA81" },
-      headerTitleStyle: { fontSize: 22, color: "white" }
+      title: "증권추가",
+      headerStyle: { backgroundColor: "#ffdb00" },
+      headerTitleStyle: { fontSize: 15, color: "white", fontWeight: "600", fontStyle: "normal", letterSpacing: 0, color: "#535353" }
     };
   };
+  state = {
+    isModalVisible: false,
+    onPressItem: {}
+  };
+
 
 
   //   async componentDidMount() {
@@ -119,7 +124,7 @@ class RegistrationStock extends React.Component {
             onPress={() => {
               if (
                 this.state.image ==
-                "http://mblogthumb3.phinf.naver.net/MjAxODA2MTVfMjkg/MDAxNTI5MDM2Mzc2NTMx.Ivt22TO6PAHisNnQ0hZr1TGhAKpX0jS3P8DOgd7eUzcg.bOEGQziKBWU89ao2RBaB-eAXGy79kcEu4OC9vMj3lJMg.PNG.stan322/image.png?type=w800"
+                "https://www.posbill.com/kassensystem-blog/wp-content/themes/miyazaki/assets/images/default-fallback-image.png"
               ) {
                 return alert("연필모양을 눌러 증권을 등록해주세요");
               } else {                

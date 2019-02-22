@@ -13,6 +13,7 @@ import _ from "lodash";
 import { FlatList } from "react-native-gesture-handler";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import PlannerFlatList from "../components/PlannerFlatList";
+import { withTheme } from "react-native-elements";
 
 class Planner extends React.Component {
   state = {
@@ -21,7 +22,9 @@ class Planner extends React.Component {
 
   static navigationOptions = ({ navigation }) => {
     return {
-      headerStyle: { backgroundColor: "#F5DA81", justifyContent: "flex-start" }
+      title: "설계사 리스트",
+      headerStyle: { backgroundColor: "#ffdb00" },
+      headerTitleStyle: { fontSize: 15, color: "white", fontWeight: "600", fontStyle: "normal", letterSpacing: 0, color: "#535353" }
     };
   };
 
@@ -37,6 +40,7 @@ class Planner extends React.Component {
         <View style={styles.secondContainer}>
           <TextInput
             style={styles.searchBarContainer}
+            placeholder="검색"
             onChangeText={text =>
               this.props.dispatch({
                 type: "ADD_SEARCH_INDEX",
@@ -53,7 +57,7 @@ class Planner extends React.Component {
           <TouchableOpacity
             style={[
               styles.basicCategoryButton,
-              { borderBottomColor: this.state.index == 1 ? "#F5DA81" : "white" }
+              { backgroundColor: this.state.index == 1 ? "#ffdb00" : "white" }
             ]}
             onPress={() => {
               this.setState({ index: 1 }, () =>
@@ -67,16 +71,16 @@ class Planner extends React.Component {
             }}
           >
             <Text
-              style={{ color: this.state.index == 1 ? "#F5DA81" : "#BDBDBD" }}
+              style={{ fontSize: 12, color: this.state.index == 1 ? "white" : "#BDBDBD" }}
             >
-              별점순
+              자동차보험
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[
               styles.basicCategoryButton,
               {
-                borderBottomColor: this.state.index == 2 ? "#F5DA81" : "white"
+                backgroundColor: this.state.index == 2 ? "#ffdb00" : "white"
               }
             ]}
             onPress={() => {
@@ -91,9 +95,9 @@ class Planner extends React.Component {
             }}
           >
             <Text
-              style={{ color: this.state.index == 2 ? "#F5DA81" : "#BDBDBD" }}
+              style={{fontSize: 12,color: this.state.index == 2 ? "white" : "#BDBDBD"  }}
             >
-              똑똑추천
+              육아보험
             </Text>
           </TouchableOpacity>
 
@@ -101,7 +105,7 @@ class Planner extends React.Component {
             style={[
               styles.basicCategoryButton,
               {
-                borderBottomColor: this.state.index == 3 ? "#F5DA81" : "white"
+                backgroundColor: this.state.index == 3 ? "#ffdb00" : "white"
               }
             ]}
             onPress={() => {
@@ -116,9 +120,33 @@ class Planner extends React.Component {
             }}
           >
             <Text
-              style={{ color: this.state.index == 3 ? "#F5DA81" : "#BDBDBD" }}
+              style={{ fontSize: 12, color: this.state.index == 3 ? "white" : "#BDBDBD"  }}
             >
-              성과순
+              저축성보험
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.basicCategoryButton,
+              {
+                backgroundColor: this.state.index == 4 ? "#ffdb00" : "white"
+              }
+            ]}
+            onPress={() => {
+              this.setState({ index: 4 }, () => {
+                this.setState({
+                  PlannerInfo: _.sortBy(
+                    this.props.PlannerInfo,
+                    p => p.clientNum * -1
+                  )
+                });
+              });
+            }}
+          >
+            <Text
+              style={{ fontSize: 12, color: this.state.index == 4 ? "white" : "#BDBDBD"  }}
+            >
+              보장성보험
             </Text>
           </TouchableOpacity>
         </View>
@@ -128,6 +156,13 @@ class Planner extends React.Component {
             style={{ width: "100%" }}
             contentContainerStyle={{ alignItems: "center" }}
             data={this.state.PlannerInfo}
+            ItemSeparatorComponent={ () => (
+              <View style={{
+                height: 5,
+                // marginLeft:20, 
+                backgroundColor:"#F2F2F2"
+              }} />
+            )}
             renderItem={({ item }) => (
               <PlannerFlatList
                 onPress={() => {
@@ -156,10 +191,12 @@ class Planner extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
+    paddingBottom:100
   },
   secondContainer: {
     height: 60,
+    backgroundColor: "#F2F2F2",
     width: "100%",
     justifyContent: "center",
     alignItems: "center"
@@ -167,11 +204,12 @@ const styles = StyleSheet.create({
   searchBarContainer: {
     height: 40,
     width: "90%",
-    backgroundColor: "#F2F2F2",
+    backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    paddingLeft: 40
+    paddingLeft: 40,
+    borderRadius : 5
   },
   searchIconContainer: {
     fontSize: 20,
@@ -181,16 +219,18 @@ const styles = StyleSheet.create({
   },
   categoryBox: {
     flexDirection: "row",
-    height: 50,
+    backgroundColor: "#F2F2F2",
+    height: 40,
     width: "100%",
-    justifyContent: "center"
+    justifyContent: "flex-start"
   },
   basicCategoryButton: {
-    height: 50,
-    width: "30%",
-    borderBottomWidth: 2,
+    marginLeft: 10,
+    height: 30,
+    width: 60,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    borderRadius:8
   },
   contentsScrollView: {
     borderTopColor: "#F2F2F2",

@@ -1,31 +1,50 @@
 //청구하기 Tap 화면
 
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, KeyboardAvoidingView } from "react-native";
 import { connect } from "react-redux";
 import { ImagePicker, Permissions } from "expo";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
 import md5 from "react-native-md5";
+import DateTimePicker from 'react-native-modal-datetime-picker';
 // import { getAllExternalFilesDirs } from "react-native-fs";
 
 class ClaimForInsurance extends React.Component {
-  state ={
-    claimNumber : null,
-    hash : null,
-    uriIndex : "ss"
+  constructor(props) {
+    super(props);
+    this.state = { 
+      isDateTimePickerVisible: false,
+      claimNumber : null,
+      hash : null,
+      uriIndex : "ss",
+      image: "https://www.posbill.com/kassensystem-blog/wp-content/themes/miyazaki/assets/images/default-fallback-image.png"
+    
+    };
+
 
   }
+
+  _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
+
+  _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
+
+  _handleDatePicked = (date) => {
+    console.log('A date has been picked: ', date);
+    this.setState({
+      date
+    });
+  };
+
+  
+ 
   static navigationOptions = ({ navigation }) => {
     return {
-      title: "KALON",
-      headerStyle: { backgroundColor: "#F5DA81" },
-      headerTitleStyle: { fontSize: 22, color: "white" }
+      title: "보험금 청구",
+      headerStyle: { backgroundColor: "#ffdb00" },
+      headerTitleStyle: { fontSize: 15, color: "white", fontWeight: "600", fontStyle: "normal", letterSpacing: 0, color: "#535353" }
     };
   };
-  state = {
-    image:
-      "http://mblogthumb3.phinf.naver.net/MjAxODA2MTVfMjkg/MDAxNTI5MDM2Mzc2NTMx.Ivt22TO6PAHisNnQ0hZr1TGhAKpX0jS3P8DOgd7eUzcg.bOEGQziKBWU89ao2RBaB-eAXGy79kcEu4OC9vMj3lJMg.PNG.stan322/image.png?type=w800"
-  };
+
 
   fetchHyperledgerRequestForISM() {
     return fetch(
@@ -92,27 +111,50 @@ class ClaimForInsurance extends React.Component {
  
 
     return (
-      <View style={styles.container}>
-        <View style={styles.textBox}>
-          <Text>보험금 청구하기</Text>
+      <KeyboardAvoidingView behavior="padding">
+      <View style={styles.container}> 
+              <View style={{ width: "100%", height: 250 }}>
+          <Image
+            source={{ uri : this.state.image }}
+            style={{ width: "100%", height: 250 }}
+          />
+          <TouchableOpacity style={styles.addImage} onPress={this._pickImage}>
+            <EvilIcons name="pencil" style={{ fontSize: 40 }} />
+          </TouchableOpacity>
         </View>
+
+
+
         <View style={styles.textBox}>
-          <Text> 청구자 : {this.props.UserInfo.name}</Text>
+          <Text style={{  }}>{this.props.UserInfo.name}</Text>
         </View>
+
         <TouchableOpacity
-          style={styles.textBox}
+          style={styles.textInputBox}
           onPress={() => {
             this.props.navigation.navigate("InsuranceChoiceScreen");
           }}
         >
-          <Text> {item.name || "보험선택 click"} </Text>
-        </TouchableOpacity>
+        <Text> {item.name || "보험선택 click"} </Text>
+          <Text style={{position:'absolute', right: 10, fontSize:15}}> > </Text>
+         </TouchableOpacity>
+        <TextInput style={styles.textInputBox} placeholder="사고이름 ex) 교통사고"/>
 
-        <View style={styles.textBox}>
-          <Text>보험 영수증 등록하기</Text>
-        </View>
+       
+
+       
+
+        <TouchableOpacity style={styles.textInputBox} onPress={this._showDateTimePicker}>
+           <Text >사고일자 click</Text>
+        </TouchableOpacity>
+        <DateTimePicker
+          isVisible={this.state.isDateTimePickerVisible}
+          onConfirm={this._handleDatePicked}
+          onCancel={this._hideDateTimePicker}
+        />
+
         <View style={{ height: 30 }} />
-        <View style={{ width: 300, height: 300 }}>
+        {/* <View style={{ width: 300, height: 300 }}>
           <Image
             source={{ uri: this.state.image }}
             style={{ borderRadius: 30, width: 290, height: 290 }}
@@ -120,14 +162,14 @@ class ClaimForInsurance extends React.Component {
           <TouchableOpacity style={styles.addImage} onPress={this._pickImage}>
             <EvilIcons name="pencil" style={{ fontSize: 40 }} />
           </TouchableOpacity>
-        </View>
+        </View> */}
         <View style={styles.buttonBox}>
           <TouchableOpacity
             style={styles.buttonStyle}
             onPress={() => {
               if (
                 this.state.image ==
-                "http://mblogthumb3.phinf.naver.net/MjAxODA2MTVfMjkg/MDAxNTI5MDM2Mzc2NTMx.Ivt22TO6PAHisNnQ0hZr1TGhAKpX0jS3P8DOgd7eUzcg.bOEGQziKBWU89ao2RBaB-eAXGy79kcEu4OC9vMj3lJMg.PNG.stan322/image.png?type=w800"
+                "https://www.posbill.com/kassensystem-blog/wp-content/themes/miyazaki/assets/images/default-fallback-image.png"
               ) {
                 return alert("연필모양을 눌러 영수증을 등록해주세요");
               } else {
@@ -139,7 +181,7 @@ class ClaimForInsurance extends React.Component {
                   body: JSON.stringify({
                       "Key" : String("Claim"+ (this.state.claimNumber + 1)),
                       "accidentName" : "입력하기",
-                      "accidentDay": "입력하기",
+                      "accidentDay": String(this.state.date),
                       "requestDay": String(this.state.today),
                       "accidentNum": String("a0df0f0"+(this.state.claimNumber + 1)),
                       "insuranceName": "김정수",
@@ -147,7 +189,6 @@ class ClaimForInsurance extends React.Component {
                       "stateReceive": "false",
                       "userId": 'user1', 
                       "image": String(this.state.hash) 
-
                   }),
                   headers:{
                     "Content-Type" : "application/json"
@@ -162,8 +203,10 @@ class ClaimForInsurance extends React.Component {
           >
             <Text> 영수증 등록하기 </Text>
           </TouchableOpacity>
+         </View> 
         </View>
-      </View>
+      </KeyboardAvoidingView>
+      
     );
   }
   _pickImage = async () => {
@@ -193,17 +236,31 @@ class ClaimForInsurance extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#f8f8f8",
     alignItems: "center",
     justifyContent: "flex-start"
   },
   textBox: {
-    height: 60,
-    width: "100%",
+    marginTop:13,
+    height: 50,
+    width: 330,
     justifyContent: "center",
-    alignItems: "center",
+    paddingLeft : 30 ,
+    alignItems: "flex-start",
+    backgroundColor: "#e6e6e6",
     borderColor: "#D8D8D8",
     borderWidth: 1
+  },
+  textInputBox : {
+    marginTop:13,
+    height: 50,
+    width: 330,
+    justifyContent: "center",
+    paddingLeft : 30 ,
+    alignItems: "flex-start",
+    borderColor: "#D8D8D8",
+    borderWidth: 1
+
   },
   addImage: {
     backgroundColor: "white",
@@ -212,8 +269,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     borderColor: "#D8D8D8",
     borderWidth: 1,
-    bottom: 0,
-    right: 0,
+    bottom: 15,
+    right: 15,
     borderRadius: 50,
     justifyContent: "center",
     alignItems: "center"
@@ -231,7 +288,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 20,
-    borderColor: "#F5DA81",
+    borderColor: "#ffdb00",
     borderWidth: 1.5
   }
 });

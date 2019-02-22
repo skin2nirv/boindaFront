@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
-  ScrollView
+  ScrollView,
+
 } from "react-native";
 import { connect } from "react-redux";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -17,24 +18,16 @@ import HomePlannerFlatList from "../components/HomePlannerFlatList";
 
 class Home extends React.Component {
   static navigationOptions = ({ navigation }) => {
+    
     return {
       title: "BOINDA",
-      headerStyle: { backgroundColor: "#ffdb00" }, // 노란색
-      headerTitleStyle: { fontStyle: "normal", fontSize: 19, color: "#535353" },
-      headerRight: (
-        <TouchableOpacity
-          style={styles.login}
-          onPress={() => navigation.navigate("Login")}
-        >
-          <AntDesign name="login" style={{ color: "white", size: 10 }} />
-          <Text style={{ fontSize: 10, color: "white" }}>로그아웃</Text>
-        </TouchableOpacity>
-      )
+      header : null,
     };
   };
 
   state = {
-    query: "보험시장"
+    query: "보험시장",
+
   };
 
   fetchNews(page = 1) {
@@ -149,55 +142,55 @@ class Home extends React.Component {
   // }
   
   componentDidMount = async () => {
-//       await this.fetchHyperledgerData().then(items => {
-//         this.props.dispatch({
-//           type: "ADD_PlannerInfo",
-//           PlannerInfo: JSON.parse(items.response),
-//         })
-//       }  
-//     )
-//     await this.fetchHyperledgerInsuranceDatass().then(items => {
-//       this.props.dispatch({
-//         type: "ADD_UserInsuranceInfo",
-//         UserInsuranceInfo: JSON.parse(items.response),
-//       })
-//     }  
-//   )
-//   await this.fetchHyperledgerInsuranceDatamr().then(items => {
-//     this.props.dispatch({
-//       type: "ADD_UserInsuranceInfo",
-//       UserInsuranceInfo: JSON.parse(items.response),
-//     })
-//   }  
-// )
-// await this.fetchHyperledgerInsuranceDatakb().then(items => {
-//   this.props.dispatch({
-//     type: "ADD_UserInsuranceInfo",
-//     UserInsuranceInfo: JSON.parse(items.response),
-//   })
-// }  
-// )
-//     await this.fetchHyperledgerRequestForISMss().then(items => {
-//     this.props.dispatch({
-//       type: "ADD_RequestForISM",
-//       RequestForISM: JSON.parse(items.response),
-//     })
-//   }  
-// )
-//     await this.fetchHyperledgerRequestForISMkb().then(items => {
-//       this.props.dispatch({
-//         type: "ADD_RequestForISM",
-//         RequestForISM: JSON.parse(items.response),
-//       })
-//     }  
-//     )
-//     await this.fetchHyperledgerRequestForISMmr().then(items => {
-//       this.props.dispatch({
-//         type: "ADD_RequestForISM",
-//         RequestForISM: JSON.parse(items.response),
-//       })
-//     }  
-//     )
+      await this.fetchHyperledgerData().then(items => {
+        this.props.dispatch({
+          type: "ADD_PlannerInfo",
+          PlannerInfo: JSON.parse(items.response),
+        })
+      }  
+    )
+    await this.fetchHyperledgerInsuranceDatass().then(items => {
+      this.props.dispatch({
+        type: "ADD_UserInsuranceInfo",
+        UserInsuranceInfo: JSON.parse(items.response),
+      })
+    }  
+  )
+  await this.fetchHyperledgerInsuranceDatamr().then(items => {
+    this.props.dispatch({
+      type: "ADD_UserInsuranceInfo",
+      UserInsuranceInfo: JSON.parse(items.response),
+    })
+  }  
+)
+await this.fetchHyperledgerInsuranceDatakb().then(items => {
+  this.props.dispatch({
+    type: "ADD_UserInsuranceInfo",
+    UserInsuranceInfo: JSON.parse(items.response),
+  })
+}  
+)
+    await this.fetchHyperledgerRequestForISMss().then(items => {
+    this.props.dispatch({
+      type: "ADD_RequestForISM",
+      RequestForISM: JSON.parse(items.response),
+    })
+  }  
+)
+    await this.fetchHyperledgerRequestForISMkb().then(items => {
+      this.props.dispatch({
+        type: "ADD_RequestForISM",
+        RequestForISM: JSON.parse(items.response),
+      })
+    }  
+    )
+    await this.fetchHyperledgerRequestForISMmr().then(items => {
+      this.props.dispatch({
+        type: "ADD_RequestForISM",
+        RequestForISM: JSON.parse(items.response),
+      })
+    }  
+    )
 
     await this.fetchNews().then(items =>
       this.setState({
@@ -216,19 +209,27 @@ class Home extends React.Component {
 
   render() {
     return (
-      <ScrollView style={styles.container}>
+  <View style={{paddingBottom:10, flex:1}}>
         <View style={styles.twoButtonView}>
-          <HomeRoundButton
-            onPressTopButton={() => this.props.navigation.navigate("내정보")}
-            name="md-search"
-            text="내정보"
-          />
-          <HomeRoundButton
-            onPressTopButton={() => this.props.navigation.navigate("CoinInfo")}
-            name="logo-bitcoin"
-            text="코인"
-          />
+        <Image style={{ position:'absolute', top:25, left:157 ,height:70, width:70}} source={require("../assets/logo.png")}/>
+        {/* <Text style={{ color:"#535353", fontSize: 15, position : "absolute", top: 45, left: 161, flexDirection: "column",  alignItems: "center", paddingRight: 20 }}>
+        BOINDA
+        </Text> */}
+        <TouchableOpacity
+          style={styles.login}
+          onPress={() => this.props.navigation.navigate("Settings")}
+        >
+          <AntDesign name="login" style={{ color: "white", size: 10 }} />
+          <Text style={{ fontSize: 10, color: "white" }}>로그아웃</Text>
+        </TouchableOpacity>
+        <View style ={{paddingTop: 40, justifyContent:'center', alignItems:'center'}}>
+          <Text style={{fontSize: 13, fontStyle: "normal", paddingBottom:10, paddingTop:30 }}>나의 월 보험료</Text>
+          <Text style={{fontSize: 22, fontStyle: "normal", color:"#3a3a3a" }}>87,000 원</Text>
         </View>
+
+        </View>
+      <ScrollView style={styles.container}>
+
         <View style={styles.threeButtonBox}>
           <TouchableOpacity
             style={styles.threeButtonStyle}
@@ -238,28 +239,38 @@ class Home extends React.Component {
             
           >
             <AntDesign
-              name="inbox"
-              style={[styles.threeButtonIcon, { paddingBottom: 2 }]}
+              name="heart"
+              style={[styles.threeButtonIcon, { paddingBottom: 6 }]}
             />
-            <Text style={{ fontSize: 12, color: "#A4A4A4" }}>추천상품</Text>
+            <Text style={{ fontSize: 11, color: "#A4A4A4" }}>내 설계사</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.threeButtonStyle}
             onPress={() => this.props.navigation.navigate("InsurancePlan")}
           >
          
-            <FontAwesome name="list-alt" style={styles.threeButtonIcon} />
-            <Text style={{ fontSize: 12, color: "#A4A4A4" }}>설계일정</Text>
+            <FontAwesome name="list-alt" style={[styles.threeButtonIcon, { paddingBottom: 8 }]} />
+            <Text style={{ fontSize: 11, color: "#A4A4A4" }}>설계일정</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.threeButtonStyle}>
-            <FontAwesome name="stethoscope" style={styles.threeButtonIcon} />
-            <Text style={{ fontSize: 12, color: "#A4A4A4" }}>병력조회</Text>
+            <FontAwesome name="search" style={[styles.threeButtonIcon, { paddingBottom: 10 }]} />
+            <Text style={{ fontSize: 11, color: "#A4A4A4" }}>병력조회</Text>
           </TouchableOpacity>
         </View>
+        <View style={{  height:30, flexDirection:'row'}}>
+        <View style={{width:"50%"}}>
+            <Text style={{position:'absolute', top: 15 ,left:24}}>인기설계사</Text>
+          </View>
+          <View style={{ width:"50%"}}>
+            <Text style={{position:'absolute', top:15, right:24}}>></Text>
+          </View>
+        </View>
+
         <View style={styles.horizontalFlatList}>
-          <Text style={styles.horizontalFlatListText}>인기설계사></Text>
+
+
           <FlatList
-            style={{ height: 250, width: "100%" }}
+            style={{ height: 200, width: "100%" }}
             data={this.props.PlannerInfo}
             horizontal={true}
             renderItem={({ item }) => (
@@ -375,42 +386,48 @@ class Home extends React.Component {
           />
         </View>
       </ScrollView>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   login: {
+    position : "absolute",
+    top: 45,
+    right: 15,
     flexDirection: "column",
     alignItems: "center",
-    paddingRight: 20
+    // paddingBottom: 50
+
   },
   container: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: "#fff"
   },
 
   twoButtonView: {
-    borderColor: "#ffdb00",
-    borderWidth: 1,
+    // borderColor: "#ffdb00",
+    backgroundColor: "#ffdb00",
+    // borderWidth: 1,
     justifyContent: "space-around",
     alignItems: "center",
-    height: 80,
+    height: 180,
     width: "100%",
     flexDirection: "row"
   },
   threeButtonBox: {
-    height: 60,
+    height: 85,
     width: "100%",
     backgroundColor: "#F2F2F2",
-    justifyContent: "center",
+    justifyContent: "space-around",
     flexDirection: "row",
     alignItems: "center"
   },
   threeButtonStyle: {
     backgroundColor: "white",
-    height: 55,
-    width: 121,
+    height: 75,
+    width: 120,
     borderColor: "#F2F2F2",
     borderWidth: 1,
     justifyContent: "center",
@@ -418,19 +435,21 @@ const styles = StyleSheet.create({
   },
   threeButtonIcon: {
     textAlign: "center",
-    color: "#F7D358",
+    color: "#ffdb00",
     fontSize: 20,
-    paddingBottom: 5
+    paddingBottom: 2
   },
   horizontalFlatList: {
-    height: 250,
+    height: 200,
     width: "100%",
     backgroundColor: "white",
     justifyContent: "flex-start",
-    alignItems: "center"
+    alignItems: "flex-start",
+
   },
   horizontalFlatListText: {
-    fontSize: 18,
+    paddingLeft: 24,
+    fontSize: 13,
     marginTop: 15,
     marginBottom: 5,
     color: "#585858"
