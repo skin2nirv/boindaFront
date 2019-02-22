@@ -73,7 +73,13 @@ class RegistrationStock extends React.Component {
     var startDay = this.props.navigation.getParam("startDay");
     var insuranceCo = this.props.navigation.getParam("insuranceCo");
     var UserInsuranceID = this.props.navigation.getParam("UserInsuranceID");
-
+    if(insuranceCo == "삼성"){      
+      uriIndex = "ss"   
+    }else if(insuranceCo == "메리츠"){  
+      uriIndex = "mr"
+    }else{
+       uriIndex = "kb"   
+  }
     return (
       <ScrollView style={styles.container}>
         <View style={styles.viewBox}>
@@ -117,7 +123,7 @@ class RegistrationStock extends React.Component {
               ) {
                 return alert("연필모양을 눌러 증권을 등록해주세요");
               } else {                
-                fetch(`http://${this.props.hyperServer}:8080/api/invoke/stock`, {
+                fetch(`http://${this.props.hyperServer}:8080/api/invoke/${uriIndex}/stock`, {
                   method: 'POST',
                   body: JSON.stringify({
                     "Key" : "Stock20",

@@ -6,11 +6,13 @@ import { connect } from "react-redux";
 import { ImagePicker, Permissions } from "expo";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
 import md5 from "react-native-md5";
+// import { getAllExternalFilesDirs } from "react-native-fs";
 
 class ClaimForInsurance extends React.Component {
   state ={
     claimNumber : null,
-    hash : null
+    hash : null,
+    uriIndex : "ss"
 
   }
   static navigationOptions = ({ navigation }) => {
@@ -35,6 +37,11 @@ class ClaimForInsurance extends React.Component {
       });
   };
 
+
+        
+ 
+  
+
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     
@@ -56,12 +63,34 @@ class ClaimForInsurance extends React.Component {
         mm='0'+mm
     } 
     today = mm+'/'+dd+'/'+yyyy;
+
+    
+
+
+
+
+
+
+
     this.setState({
       today 
     }) 
-}
+    console.log(this.state.UriIndex)
+  }
+
   render() {
     var item = this.props.ChoiceInsurance;
+    var insuranceCo = item.insuranceCo
+    if(insuranceCo == "삼성"){      
+        uriIndex = "ss"   
+     }else if(insuranceCo == "메리츠"){  
+        uriIndex = "mr"
+     }else{
+         uriIndex = "kb"   
+  }
+
+ 
+
     return (
       <View style={styles.container}>
         <View style={styles.textBox}>
@@ -103,7 +132,9 @@ class ClaimForInsurance extends React.Component {
                 return alert("연필모양을 눌러 영수증을 등록해주세요");
               } else {
 
-                fetch(`http://${this.props.hyperServer}:8080/api/invoke/claim`, {
+               console.log("item.insuranceCo :" + item.insuranceCo)
+               console.log("uriIndex :" + uriIndex)
+                fetch(`http://${this.props.hyperServer}:8080/api/invoke/${uriIndex}/claim`, {
                   method: 'POST',
                   body: JSON.stringify({
                       "Key" : String("Claim"+ (this.state.claimNumber + 1)),
@@ -153,7 +184,7 @@ class ClaimForInsurance extends React.Component {
       })
       // console.log(">>>>b64_md5:", b64_md5v);
       // console.log("hash :" + this.state.hash)
-      console.log("item: " + item)
+      // console.log("item: " + item)
 
     }
   };

@@ -8,7 +8,7 @@ InsuranceInfo - 특정 보험에 대한 데이터
 
 const reducer = (
   state = {
-    hyperServer : "192.168.0.9", //192.168.29.197
+    hyperServer : "192.168.29.197", //"192.168.0.9", //192.168.29.197
     ChoiceInsurance: false,
     UserComment: [
       {
@@ -151,13 +151,19 @@ const reducer = (
     case "ADD_UserInsuranceInfo":
       return {
         ...state,
-        UserInsuranceInfo: action.UserInsuranceInfo.map(item => item.Record)
+        UserInsuranceInfo: state.UserInsuranceInfo.concat(action.UserInsuranceInfo.map(item => item.Record))
       };
     case "ADD_RequestForISM":
       return {
         ...state,
-        RequestForISM: action.RequestForISM.map(item => item.Record)
-      };                
+        RequestForISM: state.RequestForISM.concat(action.RequestForISM.map(item => item.Record))
+      };
+    
+      // case "ADD_RequestForISM":
+      // return {
+      //   ...state,
+      //   RequestForISM: action.RequestForISM.map(item => item.Record)
+      // };                   
   }
 
   return state;

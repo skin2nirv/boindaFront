@@ -18,16 +18,16 @@ import HomePlannerFlatList from "../components/HomePlannerFlatList";
 class Home extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: "KALON",
-      headerStyle: { backgroundColor: "#F5DA81" }, // 노란색
-      headerTitleStyle: { fontSize: 22, color: "white" },
+      title: "BOINDA",
+      headerStyle: { backgroundColor: "#ffdb00" }, // 노란색
+      headerTitleStyle: { fontStyle: "normal", fontSize: 19, color: "#535353" },
       headerRight: (
         <TouchableOpacity
           style={styles.login}
           onPress={() => navigation.navigate("Login")}
         >
           <AntDesign name="login" style={{ color: "white", size: 10 }} />
-          <Text style={{ fontSize: 10, color: "white" }}>로그인</Text>
+          <Text style={{ fontSize: 10, color: "white" }}>로그아웃</Text>
         </TouchableOpacity>
       )
     };
@@ -71,9 +71,9 @@ class Home extends React.Component {
       });
   }
 
-  fetchHyperledgerInsuranceData() {
+  fetchHyperledgerInsuranceDatass() {
     return fetch(
-      `http://${this.props.hyperServer}:8080/api/query/queryAllContractedInsurance`
+      `http://${this.props.hyperServer}:8080/api/queryss/queryAllContractedInsurance`
     )
       .then(response => response.json())
       .catch(error => {
@@ -81,9 +81,47 @@ class Home extends React.Component {
       });
   }
 
-  fetchHyperledgerRequestForISM() {
+  fetchHyperledgerInsuranceDatamr() {
     return fetch(
-      `http://${this.props.hyperServer}:8080/api/query/queryAllClaimInsurance`
+      `http://${this.props.hyperServer}:8080/api/querymr/queryAllContractedInsurance`
+    )
+      .then(response => response.json())
+      .catch(error => {
+        console.error(error);
+      });
+  }
+  fetchHyperledgerInsuranceDatakb() {
+    return fetch(
+      `http://${this.props.hyperServer}:8080/api/querykb/queryAllContractedInsurance`
+    )
+      .then(response => response.json())
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  fetchHyperledgerRequestForISMss() {
+    return fetch(
+      `http://${this.props.hyperServer}:8080/api/queryss/queryAllClaimInsurance`
+    )
+      .then(response => response.json())
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  fetchHyperledgerRequestForISMkb() {
+    return fetch(
+      `http://${this.props.hyperServer}:8080/api/querykb/queryAllClaimInsurance`
+    )
+      .then(response => response.json())
+      .catch(error => {
+        console.error(error);
+      });
+  }
+  fetchHyperledgerRequestForISMmr() {
+    return fetch(
+      `http://${this.props.hyperServer}:8080/api/querymr/queryAllClaimInsurance`
     )
       .then(response => response.json())
       .catch(error => {
@@ -111,27 +149,56 @@ class Home extends React.Component {
   // }
   
   componentDidMount = async () => {
-      await this.fetchHyperledgerData().then(items => {
-        this.props.dispatch({
-          type: "ADD_PlannerInfo",
-          PlannerInfo: JSON.parse(items.response),
-        })
-      }  
-    )
-    await this.fetchHyperledgerInsuranceData().then(items => {
-      this.props.dispatch({
-        type: "ADD_UserInsuranceInfo",
-        UserInsuranceInfo: JSON.parse(items.response),
-      })
-    }  
-  )
-    await this.fetchHyperledgerRequestForISM().then(items => {
-    this.props.dispatch({
-      type: "ADD_RequestForISM",
-      RequestForISM: JSON.parse(items.response),
-    })
-  }  
-)
+//       await this.fetchHyperledgerData().then(items => {
+//         this.props.dispatch({
+//           type: "ADD_PlannerInfo",
+//           PlannerInfo: JSON.parse(items.response),
+//         })
+//       }  
+//     )
+//     await this.fetchHyperledgerInsuranceDatass().then(items => {
+//       this.props.dispatch({
+//         type: "ADD_UserInsuranceInfo",
+//         UserInsuranceInfo: JSON.parse(items.response),
+//       })
+//     }  
+//   )
+//   await this.fetchHyperledgerInsuranceDatamr().then(items => {
+//     this.props.dispatch({
+//       type: "ADD_UserInsuranceInfo",
+//       UserInsuranceInfo: JSON.parse(items.response),
+//     })
+//   }  
+// )
+// await this.fetchHyperledgerInsuranceDatakb().then(items => {
+//   this.props.dispatch({
+//     type: "ADD_UserInsuranceInfo",
+//     UserInsuranceInfo: JSON.parse(items.response),
+//   })
+// }  
+// )
+//     await this.fetchHyperledgerRequestForISMss().then(items => {
+//     this.props.dispatch({
+//       type: "ADD_RequestForISM",
+//       RequestForISM: JSON.parse(items.response),
+//     })
+//   }  
+// )
+//     await this.fetchHyperledgerRequestForISMkb().then(items => {
+//       this.props.dispatch({
+//         type: "ADD_RequestForISM",
+//         RequestForISM: JSON.parse(items.response),
+//       })
+//     }  
+//     )
+//     await this.fetchHyperledgerRequestForISMmr().then(items => {
+//       this.props.dispatch({
+//         type: "ADD_RequestForISM",
+//         RequestForISM: JSON.parse(items.response),
+//       })
+//     }  
+//     )
+
     await this.fetchNews().then(items =>
       this.setState({
         NewsItems: items
@@ -140,10 +207,11 @@ class Home extends React.Component {
     await this.setState({
       items: this.props.PlannerInfo,
       index: 1,
-      News: this.props.News
+      News: this.props.News,
+      RequestForISM : this.props.RequestForISM
     });
 
-    // console.log(this.props.PlannerInfo)
+    console.log("RequestForISM : " + this.state.RequestForISM)
   }
 
   render() {
@@ -323,7 +391,7 @@ const styles = StyleSheet.create({
   },
 
   twoButtonView: {
-    borderColor: "#D8D8D8",
+    borderColor: "#ffdb00",
     borderWidth: 1,
     justifyContent: "space-around",
     alignItems: "center",
@@ -404,6 +472,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
+    RequestForISM : state.RequestForISM,
     hyperServer : state.hyperServer,
     InsuranceInfo: state.UserInsuranceInfo,
     PlannerInfo: state.PlannerInfo,
