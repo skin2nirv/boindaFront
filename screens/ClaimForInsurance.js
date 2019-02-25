@@ -7,6 +7,8 @@ import { ImagePicker, Permissions } from "expo";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
 import md5 from "react-native-md5";
 import DateTimePicker from 'react-native-modal-datetime-picker';
+import Modal from "react-native-modal";
+import AntDesign from "react-native-vector-icons/AntDesign";
 // import { getAllExternalFilesDirs } from "react-native-fs";
 
 class ClaimForInsurance extends React.Component {
@@ -19,6 +21,7 @@ class ClaimForInsurance extends React.Component {
       claimNumberkb : null,
       hash : null,
       uriIndex : "ss",
+      isModalVisible: false,
       image: "https://www.posbill.com/kassensystem-blog/wp-content/themes/miyazaki/assets/images/default-fallback-image.png"
     
     };
@@ -115,6 +118,9 @@ class ClaimForInsurance extends React.Component {
     console.log(this.state.UriIndex)
   }
 
+  _toggleModal = () =>
+  this.setState({ isModalVisible: !this.state.isModalVisible });
+
   render() {
     var item = this.props.ChoiceInsurance;
     var insuranceCo = item.insuranceCo
@@ -203,14 +209,14 @@ class ClaimForInsurance extends React.Component {
                 fetch(`http://${this.props.hyperServer}:8080/api/invoke/${uriIndex}/claim`, {
                   method: 'POST',
                   body: JSON.stringify({
-                      "Key" : String("Claim"+ (this.state.claimNumber+ 1)),
+                      "Key" : "Claim15",
                       "accidentName" : String(this.state.accidentName),
-                      "accidentDay": String(this.state.date),
-                      "requestDay": String(this.state.today),
-                      "accidentNum": String("a0df0f0"+(this.state.claimNumber + 1)),
+                      "accidentDay": "19.02.26",
+                      "requestDay": "19.02.26",
+                      "accidentNum": String(this.props.claimIndex +1),
                       "insuranceName": String(item.name),
                       "insuranceCo": String(item.insuranceCo),
-                      "stateReceive": "false",
+                      "stateReceive": "미지급",
                       "userId": 'user1', 
                       "image": String(this.state.hash) 
                   }),
@@ -218,17 +224,95 @@ class ClaimForInsurance extends React.Component {
                     "Content-Type" : "application/json"
                   }
                 })
-                .then( alert("증권 등록에 성공하였습니다."))
-                .then(this.props.navigation.navigate('Home', {
-                  onBack: () => this.refresh()
-                } ))
+                .then(this.props.dispatch({
+                  type: "ADD_Coin",
+                  coin: 8
+                }))
+                .then( this._toggleModal() )
+                console.log("coin :" + this.props.coin)
+                // .then( alert("증권 등록에 성공하였습니다."))
+                // .then(this.props.navigation.navigate('Home', {
+                  // onBack: () => this.refresh()
+                // } ))
 
 
               }
             }}
           >
             <Text> 영수증 등록하기 </Text>
+
+            
           </TouchableOpacity>
+          <Modal isVisible={this.state.isModalVisible}>
+          <View
+            style={{
+              paddingLeft: 20,
+              height: 400,
+              width: 300,
+              backgroundColor: "white",
+              borderRadius: 20,
+              justifyContent: "center",
+              alignItems: "flex-start",
+              position: "absolute",
+              left: 18
+            }}
+          >
+          <Image 
+            style={{ borderRadius:5, position:'absolute', top: 30, left: 47,height:200, width: 200}} 
+            source={{uri : this.state.image}}/>
+ 
+            <Text style={{marginTop:135 ,marginLeft:10}}>고객님의 병원영수증이 안전하게 등록되었습니다.</Text>
+            <TouchableOpacity 
+          style={{
+            position:'absolute',
+            bottom:30,
+            left : 25,
+            height: 50,
+            width: 250,
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: 20,
+            borderColor: "#F5DA81",
+            borderWidth: 1.5
+          }}
+          onPress={()=>{
+            fetch(`http://${this.props.hyperServer}:8080/api/invoke/coin/user`, {
+              method: 'POST',
+              body: JSON.stringify({
+                "userId" : "user1",
+                "coin" : 3,
+
+              }),
+              headers:{
+                "Content-Type" : "application/json"
+              }
+            })
+            // .then(alert("3코인이 발급되었습니다"))
+            .then(
+              this.props.dispatch({
+                type: "ADD_ClaimIndex",
+              })
+            )
+            .then(this._toggleModal())
+            // 
+            .then(this.props.navigation.navigate('Home'))
+            // 
+           }}
+       
+          >
+          <Text>8코인수령하기</Text>
+
+          </TouchableOpacity>
+
+
+            <TouchableOpacity
+              style={{ position: "absolute", top: 20, right: 20 }}
+              onPress={this._toggleModal}
+            >
+              <AntDesign style={{ fontSize: 20 }} name="closecircleo" />
+            </TouchableOpacity>
+          </View>
+        </Modal>
          </View> 
         </View>
       </KeyboardAvoidingView>
@@ -321,6 +405,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
+    claimIndex : state.claimIndex,
+    coin : state.coin,
     hyperServer : state.hyperServer,
     UserInfo: state.UserInfo,
     ChoiceInsurance: state.ChoiceInsurance

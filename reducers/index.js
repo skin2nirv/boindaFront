@@ -8,10 +8,12 @@ InsuranceInfo - 특정 보험에 대한 데이터
 
 const reducer = (
   state = {
+    coin : 0,
     CoinInfo : [],
     testValue : null,
-    hyperServer : "192.168.0.9", //"192.168.0.9", //192.168.29.197
+    hyperServer : "192.168.29.197", //"192.168.0.9", //192.168.29.197
     ChoiceInsurance: false,
+    claimIndex : 8,
     Hospital : [
       
         {
@@ -225,10 +227,25 @@ const reducer = (
         ...state,
         RequestForISM: state.RequestForISM.concat(action.RequestForISM.map(item => item.Record))
       };
+      case "init_RequestForISM":
+      return {
+        ...state,
+        RequestForISM: []
+      };
       case "ADD_CoinInfo":
       return {
         ...state,
         CoinInfo: action.CoinInfo.map(item => item.Record)
+      }; 
+      case "ADD_Coin":
+      return {
+        ...state,
+        coin : state.coin + action.coin
+      }; 
+      case "ADD_ClaimIndex":
+      return {
+        ...state,
+        claimIndex : state.claimIndex + 1
       }; 
 
     

@@ -16,6 +16,7 @@ import Entypo from "@expo/vector-icons/Entypo";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import ModalFlatList from "../components/ModalFlatList";
 import JoininsuranceFlatLists from "../components/JoininsuranceFlatLists";
+import { NavigationEvents } from 'react-navigation';
 
 class Myinfo extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -42,14 +43,103 @@ class Myinfo extends React.Component {
       return "http://image.nsmall.com/itemimg/3/26/963/26451963_S.jpg";
   }
 
+  fetchHyperledgerRequestForISMss() {
+    return fetch(
+      `http://${this.props.hyperServer}:8080/api/queryss/queryAllClaimInsurance`
+    )
+      .then(response => response.json())
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  fetchHyperledgerRequestForISMkb() {
+    return fetch(
+      `http://${this.props.hyperServer}:8080/api/querykb/queryAllClaimInsurance`
+    )
+      .then(response => response.json())
+      .catch(error => {
+        console.error(error);
+      });
+  }
+  fetchHyperledgerRequestForISMmr() {
+    return fetch(
+      `http://${this.props.hyperServer}:8080/api/querymr/queryAllClaimInsurance`
+    )
+      .then(response => response.json())
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    await this.fetchHyperledgerRequestForISMss().then(items => {
+      this.props.dispatch({
+        type: "ADD_RequestForISM",
+        RequestForISM: JSON.parse(items.response),
+      })
+    }  
+  )
+      await this.fetchHyperledgerRequestForISMkb().then(items => {
+        this.props.dispatch({
+          type: "ADD_RequestForISM",
+          RequestForISM: JSON.parse(items.response),
+        })
+      }  
+      )
+      await this.fetchHyperledgerRequestForISMmr().then(items => {
+        this.props.dispatch({
+          type: "ADD_RequestForISM",
+          RequestForISM: JSON.parse(items.response),
+        })
+      }  
+      )
   }
   render() {
     let { image } = this.props.UserInfo;
 
     return (
       <ScrollView style={styles.container}>
+ 
+        <NavigationEvents
+          onWillFocus={async () => {
+            await this.props.dispatch({
+              type: "init_RequestForISM",
+
+            })
+        
+            await this.fetchHyperledgerRequestForISMss().then(items => {
+                
+               this.props.dispatch({
+                 type: "ADD_RequestForISM",
+                 RequestForISM: JSON.parse(items.response),
+               })
+             }  
+           )
+           
+            await this.fetchHyperledgerRequestForISMkb().then(items => {
+                 this.props.dispatch({
+                   type: "ADD_RequestForISM",
+                   RequestForISM: JSON.parse(items.response),
+                 })
+               }  
+               )
+           
+            await this.fetchHyperledgerRequestForISMmr().then(items => {
+                 this.props.dispatch({
+                   type: "ADD_RequestForISM",
+                   RequestForISM: JSON.parse(items.response),
+                 })
+               }  
+               )
+           
+       }} />
+
+
+
+ 
+            
         <View style={styles.privateDataBox}>
           <View style={{ width: 105, height: 105 }}>
             {image && (
@@ -148,7 +238,7 @@ class Myinfo extends React.Component {
               secondAccidentName={item.accidentName}
               secondAccidentDay={item.accidentDay}
               secondStateReceive={
-                item.stateReceive ? "+" + item.stateReceive : "미지급"
+                item.stateReceive ?  item.stateReceive : "미지급"
               }
             />
           )}
@@ -358,12 +448,13 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
+    hyperServer : state.hyperServer,
     UserInfo: state.UserInfo,
-    RequestForISM: _.sortBy(state.RequestForISM, p => p.requestDay * -1).slice(
+    RequestForISM: _.sortBy(state.RequestForISM, p => p.accidentNum * -1).slice(
       0,
       5
     ),
-    UserInsuranceInfo: state.UserInsuranceInfo
+    UserInsuranceInfo: state.UserInsuranceInfo.slice(7,12)
   };
 };
 

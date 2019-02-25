@@ -15,6 +15,7 @@ import _ from "lodash";
 import HomeRoundButton from "../components/HomeRoundButton";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import HomePlannerFlatList from "../components/HomePlannerFlatList";
+import { NavigationEvents } from 'react-navigation';
 
 class Home extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -244,7 +245,8 @@ await this.fetchHyperledgerInsuranceDatakb().then(items => {
       items: this.props.PlannerInfo,
       index: 1,
       News: this.props.News,
-      RequestForISM : this.props.RequestForISM
+      RequestForISM : this.props.RequestForISM,
+      coin : this.props.coin
     });
 
       
@@ -253,6 +255,15 @@ await this.fetchHyperledgerInsuranceDatakb().then(items => {
   render() {
     return (
   <View style={{paddingBottom:10, flex:1}}>
+  <NavigationEvents
+          onWillFocus={() => {
+            this.setState({
+              coin : this.props.coin
+            })
+            
+        
+          }} />
+
         <View style={styles.twoButtonView}>
         <Image style={{ position:'absolute', top:25, left:157 ,height:70, width:70}} source={require("../assets/logo.png")}/>
         {/* <Text style={{ color:"#535353", fontSize: 15, position : "absolute", top: 45, left: 161, flexDirection: "column",  alignItems: "center", paddingRight: 20 }}>
@@ -272,7 +283,7 @@ await this.fetchHyperledgerInsuranceDatakb().then(items => {
         </View>
         <View style ={{marginLeft : 85,paddingTop: 40, justifyContent:'center', alignItems:'center'}}>
           <Text style={{fontSize: 13, fontStyle: "normal", paddingBottom:10, paddingTop:30 }}>나의 보유 코인</Text>
-          <Text style={{fontSize: 22, fontStyle: "normal", color:"#3a3a3a" }}>{this.state.user1Coin}BoC</Text>
+          <Text style={{fontSize: 22, fontStyle: "normal", color:"#3a3a3a" }}>{this.props.coin}BoC</Text>
         </View>
         </View>
 
@@ -542,6 +553,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
+    coin : state.coin,
     Coininfo : state.CoinInfo,
     RequestForISM : state.RequestForISM,
     hyperServer : state.hyperServer,

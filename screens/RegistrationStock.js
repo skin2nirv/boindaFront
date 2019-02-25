@@ -186,7 +186,13 @@ class RegistrationStock extends React.Component {
               headers:{
                 "Content-Type" : "application/json"
               }
-            }).then( this._toggleModal() )          
+              
+            })
+            .then(this.props.dispatch({
+              type: "ADD_Coin",
+              coin: 3
+            }))
+            .then( this._toggleModal() )          
           }}}
           
           >
