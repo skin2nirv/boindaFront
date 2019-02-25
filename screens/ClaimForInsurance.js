@@ -14,7 +14,9 @@ class ClaimForInsurance extends React.Component {
     super(props);
     this.state = { 
       isDateTimePickerVisible: false,
-      claimNumber : null,
+      claimNumberss : null,
+      claimNumbermr : null,
+      claimNumberkb : null,
       hash : null,
       uriIndex : "ss",
       image: "https://www.posbill.com/kassensystem-blog/wp-content/themes/miyazaki/assets/images/default-fallback-image.png"
@@ -64,17 +66,33 @@ class ClaimForInsurance extends React.Component {
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     
-    await this.fetchHyperledgerRequestForISM().then(items => {
+    await this.fetchHyperledgerRequestForISMss().then(items => {
       this.setState({
-        claimNumber : (JSON.parse(items.response)).length,
+        claimNumberss : (JSON.parse(items.response)).length,
       })
+    })
+    await this.fetchHyperledgerRequestForISMmr().then(items => {
+        this.setState({
+          claimNumbermr : (JSON.parse(items.response)).length,
+      })
+    })
+    await this.fetchHyperledgerRequestForISMss().then(items => {
+          this.setState({
+            claimNumberkb : (JSON.parse(items.response)).length,
+        })
       // console.log(this.state.claimNumber)
+    })
+
+    await this.setState({
+      claimNumber : 
+      (this.state.claimNumberkb + this.state.claimNumberss + this.state.claimNumbermr) 
     })
 
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth()+1; //January is 0!
     var yyyy = today.getFullYear();
+    
     if(dd<10) {
       dd='0'+dd
     } 
@@ -83,7 +101,7 @@ class ClaimForInsurance extends React.Component {
     } 
     today = mm+'/'+dd+'/'+yyyy;
 
-    
+    console.log("item :" + this.props.ChoiceInsurance)
 
 
 
@@ -138,7 +156,13 @@ class ClaimForInsurance extends React.Component {
         <Text> {item.name || "보험선택 click"} </Text>
           <Text style={{position:'absolute', right: 10, fontSize:15}}> > </Text>
          </TouchableOpacity>
-        <TextInput style={styles.textInputBox} placeholder="사고이름 ex) 교통사고"/>
+        <TextInput 
+        style={styles.textInputBox} 
+        placeholder="사고이름 ex) 교통사고"
+        onChangeText={text =>
+          this.setState({
+            accidentName : text
+          })}/>
 
        
 
@@ -179,12 +203,12 @@ class ClaimForInsurance extends React.Component {
                 fetch(`http://${this.props.hyperServer}:8080/api/invoke/${uriIndex}/claim`, {
                   method: 'POST',
                   body: JSON.stringify({
-                      "Key" : String("Claim"+ (this.state.claimNumber + 1)),
-                      "accidentName" : "입력하기",
+                      "Key" : String("Claim"+ (this.state.claimNumber+ 1)),
+                      "accidentName" : String(this.state.accidentName),
                       "accidentDay": String(this.state.date),
                       "requestDay": String(this.state.today),
                       "accidentNum": String("a0df0f0"+(this.state.claimNumber + 1)),
-                      "insuranceName": "김정수",
+                      "insuranceName": String(item.name),
                       "insuranceCo": String(item.insuranceCo),
                       "stateReceive": "false",
                       "userId": 'user1', 
@@ -195,7 +219,9 @@ class ClaimForInsurance extends React.Component {
                   }
                 })
                 .then( alert("증권 등록에 성공하였습니다."))
-                .then(this.props.navigation.navigate('Home'))
+                .then(this.props.navigation.navigate('Home', {
+                  onBack: () => this.refresh()
+                } ))
 
 
               }

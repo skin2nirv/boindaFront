@@ -13,7 +13,7 @@ import _ from "lodash";
 import { FlatList } from "react-native-gesture-handler";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import PlannerFlatList from "../components/PlannerFlatList";
-import { withTheme } from "react-native-elements";
+// import { withTheme } from "react-native-elements";
 
 class Planner extends React.Component {
   state = {
@@ -64,7 +64,7 @@ class Planner extends React.Component {
                 this.setState({
                   PlannerInfo: _.sortBy(
                     this.props.PlannerInfo,
-                    p => p.averageEstimation * -1
+                    p => p.carPoint * -1
                   )
                 })
               );
@@ -88,7 +88,7 @@ class Planner extends React.Component {
                 this.setState({
                   PlannerInfo: _.sortBy(
                     this.props.PlannerInfo,
-                    p => p.smartRecommedPoint * -1
+                    p => p.babyPoint * -1
                   )
                 })
               );
@@ -113,7 +113,7 @@ class Planner extends React.Component {
                 this.setState({
                   PlannerInfo: _.sortBy(
                     this.props.PlannerInfo,
-                    p => p.clientNum * -1
+                    p => p.savePoint * -1
                   )
                 });
               });
@@ -137,7 +137,7 @@ class Planner extends React.Component {
                 this.setState({
                   PlannerInfo: _.sortBy(
                     this.props.PlannerInfo,
-                    p => p.clientNum * -1
+                    p => p.guaranteePoint * -1
                   )
                 });
               });

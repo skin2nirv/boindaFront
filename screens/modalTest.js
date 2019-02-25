@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, TouchableOpacity, View,FlatList } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import Modal from "react-native-modal";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { connect } from "react-redux";
@@ -7,15 +7,12 @@ import _ from "lodash";
 
 class Test extends Component {
   state = {
-    isModalVisible: false,
-    addCoin : 30,
-    user1Coininfo : null
-
+    isModalVisible: false
   };
 
   fetchHyperledgerData() {
     return fetch(
-      `http://${this.props.hyperServer}:8080/api/query/queryAllUserCoins`
+      `http://${this.props.hyperServer}:8080/api/query/queryAllPlanners`
     )
       .then(response => response.json())
       .catch(error => {
@@ -30,14 +27,8 @@ class Test extends Component {
         type: "ADD_PlannerInfo",
         PlannerInfo: JSON.parse(items.response),
       })
-    })
-    await this.setState({
-      user1Coininfo : this.props.PlannerInfo.find('user1')
-
-    })
-
-    console.log("user1 CoinInfo : " + this.state.user1Coininfo)
-    
+    }  
+  )
 
     
   }
@@ -47,34 +38,32 @@ class Test extends Component {
   render() {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-       <FlatList style={{  height: 100, width: "100%" }}
-            data={this.props.PlannerInfo}
-            ItemSeparatorComponent={ () => (
-              <View style={{
-                height: 50,
-                // marginLeft:20, 
-              }} />
-            )}
-            renderItem={({ item }) => (
-              <Text>{item.coin}</Text>
-
-            )}
-            ></FlatList>
-        <TouchableOpacity 
-        style={{height:200, width: 300, backgroundColor : 'green'}}
-        onPress={()=>
-          fetch(`http://${this.props.hyperServer}:8080/api/invoke/coin/user`, {
-                  method: 'POST',
-                  body: JSON.stringify({
-                    "addcoin" : 30
-                  }),
-                  headers:{
-                    "Content-Type" : "application/json"
-                  }
-                  })
-          }>
-        </TouchableOpacity>    
-      
+        <TouchableOpacity onPress={this._toggleModal}>
+          <Text>Show Modal</Text>
+        </TouchableOpacity>
+        <Modal isVisible={this.state.isModalVisible}>
+          <View
+            style={{
+              paddingLeft: 20,
+              height: 500,
+              width: 300,
+              backgroundColor: "white",
+              borderRadius: 20,
+              justifyContent: "center",
+              alignItems: "center",
+              position: "absolute",
+              left: 18
+            }}
+          >
+            <Text>Hello!</Text>
+            <TouchableOpacity
+              style={{ position: "absolute", top: 20, right: 20 }}
+              onPress={this._toggleModal}
+            >
+              <AntDesign style={{ fontSize: 20 }} name="closecircleo" />
+            </TouchableOpacity>
+          </View>
+        </Modal>
       </View>
     );
   }

@@ -19,6 +19,8 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import md5 from "react-native-md5";
+import Modal from "react-native-modal";
+import AntDesign from "react-native-vector-icons/AntDesign";
 
 
 
@@ -30,6 +32,7 @@ class RegistrationStock extends React.Component {
     super();
     this.state = {
       hash: null,
+      isModalVisible: false,
       // buffer: null,
       // ipfsHash: null,
       image:
@@ -39,6 +42,7 @@ class RegistrationStock extends React.Component {
     };
   
   }
+
 
   static navigationOptions = ({ navigation }) => {
     return {
@@ -72,6 +76,10 @@ class RegistrationStock extends React.Component {
   async componentDidMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
   }
+
+  _toggleModal = () =>
+  this.setState({ isModalVisible: !this.state.isModalVisible });
+
   render() {
     let image = this.state.image;
     var name = this.props.navigation.getParam("name");
@@ -119,9 +127,9 @@ class RegistrationStock extends React.Component {
           </View>
         </View>
         <View style={styles.buttonBox}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.buttonPress}
-            onPress={() => {
+            onPress={()=>{
               if (
                 this.state.image ==
                 "https://www.posbill.com/kassensystem-blog/wp-content/themes/miyazaki/assets/images/default-fallback-image.png"
@@ -133,7 +141,7 @@ class RegistrationStock extends React.Component {
                   body: JSON.stringify({
                     "Key" : "Stock20",
                     "userId" : "user1",
-                    "name" : String(UserInsuranceID),
+                    "name" : String(name),
                     "image" : this.state.hash,
                     "InsuranceCompany" : insuranceCo
                   }),
@@ -141,14 +149,115 @@ class RegistrationStock extends React.Component {
                     "Content-Type" : "application/json"
                   }
                 })
-                .then( alert("증권 등록에 성공하였습니다."))
-                .then(this.props.navigation.navigate('InsuranceStockOption'))
+                            
+                .then(
+                  
+                  )
+                .then(this.props.navigation.navigate('Myinfo'))
                 
               }              
             }}
-          >
+            >
+    
+
+    
+    
+    
             <Text> 증권 등록하기 </Text>
+          </TouchableOpacity> */}
+          <TouchableOpacity 
+          style={styles.buttonPress}
+          onPress={()=>{
+          if (
+            this.state.image ==
+            "https://www.posbill.com/kassensystem-blog/wp-content/themes/miyazaki/assets/images/default-fallback-image.png"
+          ) {
+            return alert("연필모양을 눌러 증권을 등록해주세요");
+          } else {
+            fetch(`http://${this.props.hyperServer}:8080/api/invoke/${uriIndex}/stock`, {
+              method: 'POST',
+              body: JSON.stringify({
+                "Key" : "Stock20",
+                "userId" : "user1",
+                "name" : String(name),
+                "image" : this.state.hash,
+                "InsuranceCompany" : insuranceCo
+              }),
+              headers:{
+                "Content-Type" : "application/json"
+              }
+            }).then( this._toggleModal() )          
+          }}}
+          
+          >
+          <Text>증권등록하기</Text>
+
           </TouchableOpacity>
+        <Modal isVisible={this.state.isModalVisible}>
+          <View
+            style={{
+              paddingLeft: 20,
+              height: 400,
+              width: 300,
+              backgroundColor: "white",
+              borderRadius: 20,
+              justifyContent: "center",
+              alignItems: "flex-start",
+              position: "absolute",
+              left: 18
+            }}
+          >
+          <Image 
+            style={{ borderRadius:5, position:'absolute', top: 30, left: 47,height:200, width: 200}} 
+            source={{uri : this.state.image}}/>
+ 
+            <Text style={{marginTop:135 ,marginLeft:10}}>고객님의 증권이 안전하게 등록되었습니다.</Text>
+            <TouchableOpacity 
+          style={{
+            position:'absolute',
+            bottom:30,
+            left : 25,
+            height: 50,
+            width: 250,
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: 20,
+            borderColor: "#F5DA81",
+            borderWidth: 1.5
+          }}
+          onPress={()=>{
+            fetch(`http://${this.props.hyperServer}:8080/api/invoke/coin/user`, {
+              method: 'POST',
+              body: JSON.stringify({
+                "userId" : "user1",
+                "coin" : 3,
+
+              }),
+              headers:{
+                "Content-Type" : "application/json"
+              }
+            })
+            // .then(alert("3코인이 발급되었습니다"))
+            .then(this._toggleModal())
+            // 
+            .then(this.props.navigation.navigate('Myinfo'))
+            // 
+           }}
+       
+          >
+          <Text>3코인수령하기</Text>
+
+          </TouchableOpacity>
+
+
+            <TouchableOpacity
+              style={{ position: "absolute", top: 20, right: 20 }}
+              onPress={this._toggleModal}
+            >
+              <AntDesign style={{ fontSize: 20 }} name="closecircleo" />
+            </TouchableOpacity>
+          </View>
+        </Modal>
         </View>
       </ScrollView>
     );
@@ -170,7 +279,7 @@ class RegistrationStock extends React.Component {
         hash : b64_md5v
       })
       // console.log(">>>>b64_md5:", b64_md5v);
-      // console.log("image uri : " + this.state.hash)
+      console.log("image uri : " + this.state.image)
     }
   };
 }

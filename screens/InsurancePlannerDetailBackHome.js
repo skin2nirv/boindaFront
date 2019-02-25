@@ -19,7 +19,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import PureChart from 'react-native-pure-chart';
 
 
-class InsurancePlannerDetail extends React.Component {
+class InsurancePlannerDetailBackHome extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: "설계사 리스트",
@@ -231,4 +231,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(InsurancePlannerDetail);
+export default connect(mapStateToProps)(InsurancePlannerDetailBackHome);

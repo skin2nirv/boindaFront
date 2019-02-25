@@ -31,14 +31,15 @@ import SearchPlanner from "./screens/SearchPlanner";
 import InsurancePlannerDetail from "./screens/InsurancePlannerDetail";
 import InsuranceChoiceScreen from "./screens/InsuranceChoiceScreen";
 import ClaimForInsurance from "./screens/ClaimForInsurance";
-
-//import Test from "./screens/Test";
+import InsurancePlannerDetailBackHome from "./screens/InsurancePlannerDetailBackHome";
+import Test from "./screens/Test";
+import Hospital from "./screens/Hospital";
 
 let store = createStore(reducer);
 
 const Settings = createStackNavigator({
   Settings: {
-      screen: Login
+      screen: Test// Login으로 바꿀 것
   }
 })
 
@@ -46,12 +47,14 @@ const homeStack = createStackNavigator({
   
   Home: {screen: Home}, // Home 으로 바꿀 것
   Login: Login,
+  Hospital: Hospital,
   Detail: HomeDetail,
   ClaimForInsurance: ClaimForInsurance,
   Planner: Planner,
   MyWeb: MyWeb,
   InsurancePlan: InsurancePlan,
-  RecomandInsurance: RecomandInsurance
+  RecomandInsurance: RecomandInsurance,
+  InsurancePlannerDetailBackHome: InsurancePlannerDetailBackHome
 },
 
 );
@@ -149,7 +152,7 @@ const TabNavigator = createBottomTabNavigator(
 const RootStack = createStackNavigator(
   {
     Setting:{
-      screen : Login 
+      screen : Login
     },
     Main: {
       screen: TabNavigator

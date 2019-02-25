@@ -27,6 +27,8 @@ class Home extends React.Component {
 
   state = {
     query: "보험시장",
+    coin: 0,
+    coinSet : 0,
 
   };
 
@@ -64,7 +66,27 @@ class Home extends React.Component {
       });
   }
 
+  fetchHyperledgerCoinData() {
+    return fetch(
+      `http://${this.props.hyperServer}:8080/api/query/queryAllUserCoins`
+    )
+      .then(response => response.json())
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
   fetchHyperledgerInsuranceDatass() {
+    return fetch(
+      `http://${this.props.hyperServer}:8080/api/queryss/queryAllContractedInsurance`
+    )
+      .then(response => response.json())
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+    fetchHyperledgerInsuranceDatass() {
     return fetch(
       `http://${this.props.hyperServer}:8080/api/queryss/queryAllContractedInsurance`
     )
@@ -192,11 +214,32 @@ await this.fetchHyperledgerInsuranceDatakb().then(items => {
     }  
     )
 
+    await this.fetchHyperledgerCoinData().then(items => {
+      this.setState({
+        coin : JSON.parse(items.response),
+      })      
+    
+
+   
+    }
+
+    )
+
+    await this.setState({
+      coinSet : this.state.coin.map((item => item.Record)),
+    })    
+
+    await this.setState({
+      user1Coin : this.state.coinSet[0].coin
+    })    
+    console.log(this.state.user1Coin)
+
     await this.fetchNews().then(items =>
       this.setState({
         NewsItems: items
       })
     );
+    
     await this.setState({
       items: this.props.PlannerInfo,
       index: 1,
@@ -204,7 +247,7 @@ await this.fetchHyperledgerInsuranceDatakb().then(items => {
       RequestForISM : this.props.RequestForISM
     });
 
-    console.log("RequestForISM : " + this.state.RequestForISM)
+      
   }
 
   render() {
@@ -222,9 +265,15 @@ await this.fetchHyperledgerInsuranceDatakb().then(items => {
           <AntDesign name="login" style={{ color: "white", size: 10 }} />
           <Text style={{ fontSize: 10, color: "white" }}>로그아웃</Text>
         </TouchableOpacity>
+        <View style={{flexDirection :'row'}}>
         <View style ={{paddingTop: 40, justifyContent:'center', alignItems:'center'}}>
           <Text style={{fontSize: 13, fontStyle: "normal", paddingBottom:10, paddingTop:30 }}>나의 월 보험료</Text>
           <Text style={{fontSize: 22, fontStyle: "normal", color:"#3a3a3a" }}>87,000 원</Text>
+        </View>
+        <View style ={{marginLeft : 85,paddingTop: 40, justifyContent:'center', alignItems:'center'}}>
+          <Text style={{fontSize: 13, fontStyle: "normal", paddingBottom:10, paddingTop:30 }}>나의 보유 코인</Text>
+          <Text style={{fontSize: 22, fontStyle: "normal", color:"#3a3a3a" }}>{this.state.user1Coin}BoC</Text>
+        </View>
         </View>
 
         </View>
@@ -252,7 +301,9 @@ await this.fetchHyperledgerInsuranceDatakb().then(items => {
             <FontAwesome name="list-alt" style={[styles.threeButtonIcon, { paddingBottom: 8 }]} />
             <Text style={{ fontSize: 11, color: "#A4A4A4" }}>설계일정</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.threeButtonStyle}>
+          <TouchableOpacity 
+          style={styles.threeButtonStyle}
+          onPress={() => this.props.navigation.navigate("Hospital")}>
             <FontAwesome name="search" style={[styles.threeButtonIcon, { paddingBottom: 10 }]} />
             <Text style={{ fontSize: 11, color: "#A4A4A4" }}>병력조회</Text>
           </TouchableOpacity>
@@ -276,7 +327,7 @@ await this.fetchHyperledgerInsuranceDatakb().then(items => {
             renderItem={({ item }) => (
               <HomePlannerFlatList
                 onPress={() => {
-                  this.props.navigation.navigate("InsurancePlannerDetail"),
+                  this.props.navigation.navigate("InsurancePlannerDetailBackHome"),
                     this.props.dispatch({
                       type: "ADD_PLANNER_DETAIL",
                       item: item
@@ -491,6 +542,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
+    Coininfo : state.CoinInfo,
     RequestForISM : state.RequestForISM,
     hyperServer : state.hyperServer,
     InsuranceInfo: state.UserInsuranceInfo,
