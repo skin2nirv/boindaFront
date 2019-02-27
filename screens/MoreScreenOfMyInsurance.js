@@ -33,6 +33,7 @@ class MoreScreenOfMyInsurance extends React.Component {
           <Text style={{ fontSize: 18, color: "grey" }}>가입보험></Text>
         </View>
         <FlatList
+          keyExtractor={(index, item) => index + item}
           style={{ width: "100%" }}
           ItemSeparatorComponent={() => (
             <View style={styles.itemSeparatorView} />

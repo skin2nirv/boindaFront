@@ -271,9 +271,9 @@ await this.fetchHyperledgerInsuranceDatakb().then(items => {
         </Text> */}
         <TouchableOpacity
           style={styles.login}
-          onPress={() => this.props.navigation.navigate("Settings")}
+          onPress={() => this.props.navigation.navigate("Login")}
         >
-          <AntDesign name="login" style={{ color: "white", size: 10 }} />
+          <AntDesign name="login" style={{ color: "white" }} />
           <Text style={{ fontSize: 10, color: "white" }}>로그아웃</Text>
         </TouchableOpacity>
         <View style={{flexDirection :'row'}}>
@@ -332,6 +332,7 @@ await this.fetchHyperledgerInsuranceDatakb().then(items => {
 
 
           <FlatList
+            keyExtractor={(index, item) => index + item}
             style={{ height: 200, width: "100%" }}
             data={this.props.PlannerInfo}
             horizontal={true}
@@ -431,6 +432,7 @@ await this.fetchHyperledgerInsuranceDatakb().then(items => {
             </TouchableOpacity>
           </View>
           <FlatList
+            keyExtractor={(index, item) => index + item}
             style={{ width: "100%" }}
             data={this.state.NewsItems}
             renderItem={({ item }) => (

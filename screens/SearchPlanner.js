@@ -42,6 +42,7 @@ class SearchPlanner extends React.Component {
         <ScrollView style={{ width: "100%" }}>
           <View style={styles.firstViewBox} />
           <FlatList
+            keyExtractor={(index, item) => index + item}
             style={{ width: "100%" }}
             contentContainerStyle={{ alignItems: "center" }}
             data={this.state.PlannerInfo}

@@ -69,6 +69,7 @@ class Hospital extends React.Component {
          
         </View>
                 <FlatList
+          keyExtractor={(index, item) => index + item}
           style={{ width: "100%" }}
           ItemSeparatorComponent={() => (
             <View style={styles.ItemSeparatorView} />

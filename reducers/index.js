@@ -11,7 +11,7 @@ const reducer = (
     coin : 0,
     CoinInfo : [],
     testValue : null,
-    hyperServer : "192.168.29.197", //"192.168.0.9", //192.168.29.197
+    hyperServer : "192.168.0.9", //"192.168.0.9", //192.168.29.197
     ChoiceInsurance: false,
     claimIndex : 8,
     Hospital : [

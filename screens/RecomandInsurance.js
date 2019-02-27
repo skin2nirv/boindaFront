@@ -41,6 +41,7 @@
           <ScrollView style={{ width: "100%" }}>
             <View style={styles.contentsScrollView} />
             <FlatList
+              keyExtractor={(index, item) => index + item}
               style={{ width: "100%" }}
               contentContainerStyle={{ alignItems: "center" }}
               data={this.state.PlannerInfo}

@@ -226,7 +226,7 @@ class ClaimForInsurance extends React.Component {
                 })
                 .then(this.props.dispatch({
                   type: "ADD_Coin",
-                  coin: 8
+                  coin: 3
                 }))
                 .then( this._toggleModal() )
                 console.log("coin :" + this.props.coin)
@@ -261,7 +261,7 @@ class ClaimForInsurance extends React.Component {
             style={{ borderRadius:5, position:'absolute', top: 30, left: 47,height:200, width: 200}} 
             source={{uri : this.state.image}}/>
  
-            <Text style={{marginTop:135 ,marginLeft:10}}>고객님의 병원영수증이 안전하게 등록되었습니다.</Text>
+            <Text style={{marginTop:135 ,marginLeft:10}}>병원영수증이 안전하게 등록되었습니다.</Text>
             <TouchableOpacity 
           style={{
             position:'absolute',
@@ -276,11 +276,10 @@ class ClaimForInsurance extends React.Component {
             borderWidth: 1.5
           }}
           onPress={()=>{
-            fetch(`http://${this.props.hyperServer}:8080/api/invoke/coin/user`, {
+            fetch(`http://${this.props.hyperServer}:8080/api/invoke/coin/planner`, {
               method: 'POST',
               body: JSON.stringify({
-                "userId" : "user1",
-                "coin" : 3,
+                "coin" : "3",
 
               }),
               headers:{
@@ -300,7 +299,7 @@ class ClaimForInsurance extends React.Component {
            }}
        
           >
-          <Text>8코인수령하기</Text>
+          <Text>3코인수령하기</Text>
 
           </TouchableOpacity>
 

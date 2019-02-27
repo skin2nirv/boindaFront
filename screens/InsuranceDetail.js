@@ -62,6 +62,7 @@ class InsuranceDetail extends React.Component {
           <Text style={{ fontSize: 20, paddingLeft: 5 }}>세부보장내용</Text>
         </View>
         <FlatList
+          keyExtractor={(index, item) => index + item}
           style={{ width: "100%" }}
           ItemSeparatorComponent={() => <View style={styles.flatListStyle} />}
           data={this.props.InsuranceInfo.guaranteeContents}

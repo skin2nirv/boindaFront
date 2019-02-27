@@ -38,6 +38,7 @@ class InsuranceStockOption extends React.Component {
         </View>
         <View style={styles.separatorLine} />
         <FlatList
+          keyExtractor={(index, item) => index + item}
           style={{ width: "100%" }}
           ItemSeparatorComponent={() => (
             <View style={styles.itemSeparatorLine} />
